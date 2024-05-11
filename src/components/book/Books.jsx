@@ -3,8 +3,11 @@ import axios from 'axios';
 import {Row, Col, Card, CardBody, CardFooter, InputGroup, Form, Button } from 'react-bootstrap';
 import { BsBagHeart } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
+import { app } from '../../firebaseInit';
+import { getDatabase, ref, set, get } from 'firebase/database';
 
 const Books = () => {
+    const db = getDatabase(app);
     const navi = useNavigate();
     const uid = sessionStorage.getItem("uid");
     const [page, setPage] = useState(1);
@@ -34,16 +37,25 @@ const Books = () => {
     }
 
     const onClickCart = (book) => {
-        if(uid) {
-            //장바구니에 도서 넣기
-            if(window.confirm(`[${book.title}]\n도서를 장바구니에 담으시겠습니까?`)){
-
-            }
+        if (uid) {
+          //장바구니에 도서 넣기
+          if (
+            window.confirm(`[${book.title}]\n도서를 장바구니에 담으시겠습니까?`)
+          ) {
+            get(ref(db, `cart/${uid}/${book.isbn}`)).then((snapshot) => {
+              if (snapshot.exists()) {
+                alert("이미 장바구니에 존재합니다!");
+              } else {
+                set(ref(db, `cart/${uid}/${book.isbn}`), { ...book });
+                alert("장바구니 담기 성공!");
+              }
+            });
+          }
         } else {
-            sessionStorage.setItem('target','/books');
-            navi('/login');
+          sessionStorage.setItem("target", "/books");
+          navi("/login");
         }
-    }
+      };
 
     if(loading) return <h1 className="my-5">로딩중입니다......</h1>
     return (
