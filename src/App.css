@@ -1,10 +1,12 @@
 .App {
   text-align: center;
 }
-@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Gothic+Coding&display=swap');
 @import 'bootstrap/dist/css/bootstrap.min.css';
-*{
-  font-family: "Gowun Batang", serif;
+
+
+* {
+  font-family: "Gowun Dodum", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
