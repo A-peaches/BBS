@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Row, Col, Form, InputGroup, Card, Button } from 'react-bootstrap'
 import {app} from '../../firebaseInit'
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
+import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
-const Login = () => {
+
+const Join = () => {
     const navi = useNavigate();
     const [loading, setLoading] = useState(false);
     const auth = getAuth(app);
@@ -24,19 +25,13 @@ const Login = () => {
         if(email === "" || pass === "") {
             alert("이메일과 비밀번호를 입력하세요!");
         } else {
-            //로그인 체크
+            //이메일 가입 
             setLoading(true);
-            signInWithEmailAndPassword(auth, email, pass)
+            createUserWithEmailAndPassword(auth, email, pass)
             .then(success=>{
-                alert('로그인 성공!');
+                alert('이메일 가입 성공!');
                 setLoading(false);
-                sessionStorage.setItem('email', email);
-                sessionStorage.setItem('uid', success.user.uid);
-                if(sessionStorage.getItem('target')){
-                    navi(sessionStorage.getItem('target'));
-                }else{
-                    navi("/");
-                }
+                navi('/login');
             })
             .catch(error=>{
                 alert('에러 : ' + error.message);
@@ -52,7 +47,7 @@ const Login = () => {
             <Col md={6} lg={4}>
                 <Card>
                     <Card.Header>
-                        <h3 className='text-center'>로그인</h3>
+                        <h3 className='text-center'>회원가입</h3>
                     </Card.Header>
                     <Card.Body>
                         <form onSubmit={onSubmit}>
@@ -68,10 +63,10 @@ const Login = () => {
                                 value={pass} onChange={onChange}></Form.Control>
                             </InputGroup>
                             <div>
-                                <Button className='my-2 w-100 btn-secondary' type='submit'>로그인</Button>
+                                <Button className='my-2 w-100 btn-secondary' type='submit'>회원가입</Button>
                             </div>
                             <div className='text-end'>
-                                <a href="/join" style={{color: 'black' }}>회원가입</a>
+                                <a href="/login" style={{color: 'black' }}>로그인</a>
                             </div>
                         </form>
                     </Card.Body>
@@ -81,4 +76,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Join
