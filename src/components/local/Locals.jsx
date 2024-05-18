@@ -11,6 +11,7 @@ const Locals = () => {
     const db = getDatabase(app);
     const uid = sessionStorage.getItem('uid');
     
+    const [isend, setIsend] = useState(false);
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState('인하대학교');
     const [locals, setLocals] = useState([]);
@@ -24,7 +25,8 @@ const Locals = () => {
         }
         const res = await axios.get(url, config);
         setLocals(res.data.documents);
-        // console.log(res.data);
+        setIsend(res.data.meta.is_end)
+        console.log(res.data);
         setLoading(false);
     }
     const onSubmit = (e) => {
@@ -103,7 +105,7 @@ const Locals = () => {
        <div className="text-center my-3">
                 <Button onClick={()=>setPage(page-1)} disabled={page===1} className="btn btn-warning">이전</Button>
                 <span className="mx-3">{page}</span>
-                <Button onClick={()=>setPage(page+1)} className="btn btn-warning">다음</Button>
+                <Button onClick={()=>setPage(page+1)} disabled={isend}className="btn btn-warning">다음</Button>
             </div>
     </div>
   )

@@ -10,6 +10,8 @@ const Books = () => {
     const db = getDatabase(app);
     const navi = useNavigate();
     const uid = sessionStorage.getItem("uid");
+
+    const [isend, setIsend] = useState(false);
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState('자바');
     const [loading, setLoading] = useState(false);
@@ -23,6 +25,7 @@ const Books = () => {
         const res = await axios.get(url, config);
         setBooks(res.data.documents);
         console.log(res.data);
+        setIsend(res.data.meta.is_end)
         setLoading(false);
     }
 
@@ -90,8 +93,8 @@ const Books = () => {
             <div className="text-center my-3">
                 <Button onClick={()=>setPage(page-1)} disabled={page===1} className="btn btn-warning">이전</Button>
                 <span className="mx-3">{page}</span>
-                <Button onClick={()=>setPage(page+1)} className="btn btn-warning">다음</Button>
-            </div>
+                <Button onClick={()=>setPage(page+1)} disabled={isend}className="btn btn-warning">다음</Button>
+              </div>
         </div>
     )
 }
