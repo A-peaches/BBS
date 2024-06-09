@@ -3,8 +3,10 @@ import {Row, Col, Form, Button} from 'react-bootstrap'
 import { getFirestore, collection, addDoc} from 'firebase/firestore';
 import {app} from '../../firebaseInit';
 import moment from 'moment/moment';
+import { useNavigate } from "react-router-dom";
 
 const InsertPage = () => {
+    const navi = useNavigate();
     const db = getFirestore(app);
     const [form, setForm] = useState({
         title : '',
@@ -17,6 +19,11 @@ const InsertPage = () => {
             ...form, [e.target.name]: e.target.value
         })
     }
+
+    const onCancel =() => {
+        navi(-1);
+    }
+
     const onInsert = async()=> {
         if(title==="" || contents ==="") {
             alert('제목과 내용을 입력하세요!');
@@ -48,7 +55,7 @@ const InsertPage = () => {
                     <div className='text-center mt-3'>
                         <Button onClick={onInsert} 
                         variant='success' className="mx-2 me-2 px-5">등록</Button>
-                        <Button variant='danger' className="px-5">취소</Button>
+                        <Button onClick={onCancel} variant='danger' className="px-5">취소</Button>
                     </div>
                 </div>
             </Col>
